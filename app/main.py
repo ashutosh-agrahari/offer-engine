@@ -3,6 +3,7 @@ from sqlalchemy.orm import Session
 from app import models
 from app.database import engine, SessionLocal
 from app.schemas import OfferRequest
+import re
 
 app = FastAPI()
 
@@ -57,3 +58,28 @@ def create_offers(payload: OfferRequest, db: Session = Depends(get_db)):
         "noOfOffersIdentified": total_offers,
         "noOfNewOffersCreated": new_offers
     }
+
+import re
+
+@app.get("/highest-discount")
+def get_highest_discount(amountToPay: float, bankName: str, db: Session = Depends(get_db)):
+    offers = db.query(models.Offer).filter(models.Offer.bank_name == bankName).all()
+
+    if not offers:
+        return {"highestDiscountAmount": 0}
+
+    def extract_discount(text):
+        if not text:
+            return 0
+        numbers = re.findall(r'\d+', text)
+        return int(numbers[0]) if numbers else 0
+
+    max_discount = 0
+
+    for offer in offers:
+        discount = extract_discount(offer.offer_text)
+        if discount > max_discount:
+            max_discount = discount
+
+    return {"highestDiscountAmount": max_discount}
+
