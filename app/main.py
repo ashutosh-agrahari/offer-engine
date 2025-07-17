@@ -36,6 +36,7 @@ def create_offers(payload: OfferRequest, db: Session = Depends(get_db)):
                 offer_text = offer.get('offerText', {}).get('text')
                 description = offer.get('offerDescription', {}).get('text')
                 providers = offer.get('provider', []) or ['ALL_BANKS']
+                instruments = offer.get('paymentInstrument', []) or []
 
                 total_offers += len(providers)
 
@@ -47,7 +48,7 @@ def create_offers(payload: OfferRequest, db: Session = Depends(get_db)):
                             bank_name=bank,
                             offer_text=offer_text,
                             description=description,
-                            payment_instruments=[]
+                            payment_instruments=instruments
                         )
                         db.add(new_entry)
                         new_offers += 1
@@ -59,10 +60,8 @@ def create_offers(payload: OfferRequest, db: Session = Depends(get_db)):
         "noOfNewOffersCreated": new_offers
     }
 
-import re
-
 @app.get("/highest-discount")
-def get_highest_discount(amountToPay: float, bankName: str, db: Session = Depends(get_db)):
+def get_highest_discount(amountToPay: float, bankName: str, paymentInstrument: str, db: Session = Depends(get_db)):
     offers = db.query(models.Offer).filter(models.Offer.bank_name == bankName).all()
 
     if not offers:
@@ -77,9 +76,11 @@ def get_highest_discount(amountToPay: float, bankName: str, db: Session = Depend
     max_discount = 0
 
     for offer in offers:
-        discount = extract_discount(offer.offer_text)
-        if discount > max_discount:
-            max_discount = discount
+        if not offer.payment_instruments or paymentInstrument in offer.payment_instruments:
+            discount = extract_discount(offer.offer_text)
+            if discount > max_discount:
+                max_discount = discount
 
     return {"highestDiscountAmount": max_discount}
+
 
