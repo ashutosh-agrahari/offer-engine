@@ -1,7 +1,8 @@
-from fastapi import FastAPI, Depends, Request
+from fastapi import FastAPI, Depends
 from sqlalchemy.orm import Session
 from app import models
 from app.database import engine, SessionLocal
+from app.schemas import OfferRequest
 
 app = FastAPI()
 
@@ -20,9 +21,8 @@ def root():
     return {"message": "Offer Engine API is running"}
 
 @app.post("/offer")
-async def create_offers(request: Request, db: Session = Depends(get_db)):
-    body = await request.json()
-    offer_items = body.get('flipkartOfferApiResponse', {}).get('paymentOptions', {}).get('items', [])
+def create_offers(payload: OfferRequest, db: Session = Depends(get_db)):
+    offer_items = payload.flipkartOfferApiResponse.get('paymentOptions', {}).get('items', [])
 
     total_offers = 0
     new_offers = 0
