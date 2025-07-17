@@ -1,13 +1,59 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Depends, Request
+from sqlalchemy.orm import Session
+from app import models
+from app.database import engine, SessionLocal
 
 app = FastAPI()
 
-from app.database import engine
-from app import models
-
 models.Base.metadata.create_all(bind=engine)
 
+# Dependency for DB session
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
 
 @app.get("/")
 def root():
     return {"message": "Offer Engine API is running"}
+
+@app.post("/offer")
+async def create_offers(request: Request, db: Session = Depends(get_db)):
+    body = await request.json()
+    offer_items = body.get('flipkartOfferApiResponse', {}).get('paymentOptions', {}).get('items', [])
+
+    total_offers = 0
+    new_offers = 0
+
+    for item in offer_items:
+        if item.get('type') == 'OFFER_LIST':
+            offer_list = item.get('data', {}).get('offers', {}).get('offerList', [])
+            for offer in offer_list:
+                offer_id = offer.get('offerDescription', {}).get('id')
+                offer_text = offer.get('offerText', {}).get('text')
+                description = offer.get('offerDescription', {}).get('text')
+                providers = offer.get('provider', []) or ['ALL_BANKS']
+
+                total_offers += len(providers)
+
+                for bank in providers:
+                    existing_offer = db.query(models.Offer).filter_by(offer_id=offer_id, bank_name=bank).first()
+                    if not existing_offer:
+                        new_entry = models.Offer(
+                            offer_id=offer_id,
+                            bank_name=bank,
+                            offer_text=offer_text,
+                            description=description,
+                            payment_instruments=[]
+                        )
+                        db.add(new_entry)
+                        new_offers += 1
+
+    db.commit()
+
+    return {
+        "noOfOffersIdentified": total_offers,
+        "noOfNewOffersCreated": new_offers
+    }
