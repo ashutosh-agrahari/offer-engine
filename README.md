@@ -21,7 +21,7 @@ Built with **FastAPI**, **SQLite**, and **SQLAlchemy**.
 1. **Clone the repository**
 
    ```bash
-   git clone https://github.com/yourusername/offer-engine.git
+   git clone https://github.com/ashutosh-agrahari/offer-engine.git
    cd offer-engine
    ```
 
