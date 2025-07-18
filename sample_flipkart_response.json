@@ -1,0 +1,109 @@
+{
+  "flipkartOfferApiResponse": {
+    "paymentOptions": {
+      "items": [
+        {
+          "type": "OFFER_LIST",
+          "data": {
+            "offerSummary": {
+              "title": "10% instant discount",
+              "subTitle": "Claim now with payment offers",
+              "iconsInfo": {
+                "remainingOffersCount": 5,
+                "icons": [
+                  "/FK_STATIC_ASSET/fk-p-linchpin-web/fk-gringotts/images/green-offer-tag.svg",
+                  "/FK_STATIC_ASSET/fk-p-linchpin-web/fk-gringotts/images/banks/IDFC.svg"
+                ]
+              }
+            },
+            "offers": {
+              "headerTitle": "Offers on online payment",
+              "offerList": [
+                {
+                  "provider": ["HDFC", "ICICI", "IDFC"],
+                  "offerText": { "text": "Save ₹2,000" },
+                  "offerDescription": {
+                    "id": "OFFER001",
+                    "text": "₹2000 Off on Credit and Debit Card Transactions. Min Txn Value: ₹10,000"
+                  }
+                },
+                {
+                  "provider": ["AXIS", "FLIPKARTAXISBANK"],
+                  "offerText": { "text": "Save ₹750" },
+                  "offerDescription": {
+                    "id": "OFFER002",
+                    "text": "₹750 Off on Axis Bank Credit Card EMI Transactions. Min Txn Value: ₹4,990"
+                  }
+                },
+                {
+                  "provider": ["AXIS"],
+                  "offerText": { "text": "Save ₹1,250" },
+                  "offerDescription": {
+                    "id": "OFFER003",
+                    "text": "₹1,250 Off on Axis Bank Credit Card Non EMI Transactions. Min Txn Value: ₹9,990"
+                  }
+                },
+                {
+                  "provider": ["IDFC"],
+                  "offerText": { "text": "Save ₹750" },
+                  "offerDescription": {
+                    "id": "OFFER004",
+                    "text": "10% off up to ₹750 on IDFC First Bank Credit Card. Min Txn Value: ₹4,990"
+                  }
+                },
+                {
+                  "provider": ["PAYTM"],
+                  "offerText": { "text": "Get ₹10 cashback" },
+                  "offerDescription": {
+                    "id": "OFFER005",
+                    "text": "Flat ₹10 Cashback on Paytm UPI Trxns. Min Order Value ₹500. Valid once per account"
+                  }
+                },
+                {
+                  "provider": ["FLIPKARTAXISBANK"],
+                  "offerText": { "text": "5% cashback offer" },
+                  "offerDescription": {
+                    "id": "OFFER006",
+                    "text": "5% cashback on Flipkart Axis Bank Credit Card upto ₹4,000. Min Txn Value: ₹5,000"
+                  }
+                },
+                {
+                  "provider": ["HDFC"],
+                  "offerText": { "text": "Save ₹1,250" },
+                  "offerDescription": {
+                    "id": "OFFER007",
+                    "text": "Flat ₹1,250 Off on HDFC Bank Cardless EMI. Min Txn Value: ₹20,000"
+                  }
+                },
+                {
+                  "provider": ["BAJAJFINSERV"],
+                  "offerText": { "text": "Save ₹0" },
+                  "offerDescription": {
+                    "id": "OFFER008",
+                    "text": "No Cost EMI on Bajaj Finserv. Min Txn Value: ₹3,000"
+                  }
+                },
+                {
+                  "provider": ["ICICI"],
+                  "offerText": { "text": "Save ₹500" },
+                  "offerDescription": {
+                    "id": "OFFER009",
+                    "text": "₹500 Off on ICICI Bank Credit Card Txns. Min Txn Value: ₹3,000"
+                  }
+                },
+                {
+                  "provider": ["SBI"],
+                  "offerText": { "text": "Save ₹1,000" },
+                  "offerDescription": {
+                    "id": "OFFER010",
+                    "text": "Flat ₹1,000 Off on SBI Card Transactions. Min Txn Value: ₹7,500"
+                  }
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  }
+}
