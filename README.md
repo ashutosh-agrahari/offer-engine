@@ -54,6 +54,7 @@ Built with **FastAPI**, **SQLite**, and **SQLAlchemy**.
 
 ## Folder Structure
 
+```
 offer-engine/
 ├── app/
 │   ├── __init__.py
@@ -67,6 +68,7 @@ offer-engine/
 ├── offers.db                  # SQLite database file (created after first run)
 ├── venv/                      # Virtual environment folder (created locally)
 
+```
 ## API Endpoints
 
 ### 1. POST `/offer`
