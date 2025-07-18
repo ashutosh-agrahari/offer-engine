@@ -41,8 +41,9 @@ def create_offers(payload: OfferRequest, db: Session = Depends(get_db)):
                 offer_text = offer.get('offerText', {}).get('text')
                 description = offer.get('offerDescription', {}).get('text')
                 providers = offer.get('provider', []) or ['ALL_BANKS']
-                instruments = offer.get('paymentInstrument', []) or []
-
+                payment_instrument = get_payment_instrument(description)
+                instruments = payment_instrument.split(', ') if payment_instrument else []
+                print(f"instruments: {instruments}")
                 total_offers += len(providers)
 
                 for bank in providers:
@@ -82,6 +83,7 @@ def get_highest_discount(amountToPay: float, bankName: str, paymentInstrument: s
         percentage_match = re.search(r'(\d+)%\s*off', description, re.IGNORECASE)
         print(f"percentage_match: {percentage_match}")
         max_discount_amount = re.search(r'Save\s*₹\s*([\d,]+)', text, re.IGNORECASE)
+        max_discount_amount = max_discount_amount or extract_max_discount(description)
         print(f"amount_match: {max_discount_amount}")
         min_txn_match = re.search(r'Min Txn Value:\s*₹\s*([\d,]+)', description, re.IGNORECASE)
         min_txn_value = int(min_txn_match.group(1).replace(',', '')) if min_txn_match else 0
@@ -110,4 +112,33 @@ def get_highest_discount(amountToPay: float, bankName: str, paymentInstrument: s
     return {"highestDiscountAmount": max_discount}
 
 
+# Utility function to determine payment instrument type
+def get_payment_instrument(description: str) -> str:
+    desc = description.lower()
+    if "credit card" in desc and "emi" in desc:
+        return "CREDIT CARD EMI"
+    elif "debit card" in desc and "emi" in desc:
+        return "DEBIT CARD EMI"
+    elif "emi" in desc:
+        return "EMI"
+    elif "credit card" in desc and "non emi" in desc:
+        return "CREDIT CARD"
+    elif "debit card" in desc and "non emi" in desc:
+        return "DEBIT CARD"
+    elif "credit card" in desc:
+        return "CREDIT CARD"
+    elif "debit card" in desc:
+        return "DEBIT CARD"
+    else:
+        return "UNKNOWN"
+
+
+def extract_max_discount(description: str) -> int:
+    # Match 'up to ₹amount' or 'upto ₹amount'
+    match = re.search(r'up\s*to\s*₹\s*([\d,]+)', description, re.IGNORECASE)
+    if not match:
+        match = re.search(r'upto\s*₹\s*([\d,]+)', description, re.IGNORECASE)
+    if match:
+        return int(match.group(1).replace(',', ''))
+    return -1
 
