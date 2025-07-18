@@ -106,7 +106,7 @@ offer-engine/
 
   * `amountToPay` — Transaction amount.
   * `bankName` — Bank name (e.g., IDFC, HDFC).
-  * `paymentInstrument` — Payment method (e.g., CREDIT CARD, UPI).
+  * `paymentInstrument` — Payment method (e.g., CREDIT CARD, DEBIT CARD, EMI, UPI etc).
 
 * **Example Request:**
 
